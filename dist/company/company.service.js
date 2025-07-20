@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const company_schema_1 = require("./company.schema");
+//TODO: Update any to specific DTOs as needed
 let CompanyService = class CompanyService {
     constructor(companyModel) {
         this.companyModel = companyModel;
@@ -27,14 +28,14 @@ let CompanyService = class CompanyService {
         return createdCompany.save();
     }
     async findCompany(id) {
-        const company = await this.companyModel.findById(id).exec();
+        const company = await this.companyModel.findById(id, '_id name industry').lean().exec();
         if (!company) {
             throw new Error('Company not found');
         }
         return company;
     }
     async updateCompany(id, updateCompanyDto) {
-        const updatedCompany = await this.companyModel.findByIdAndUpdate(id, updateCompanyDto, { new: true }).exec();
+        const updatedCompany = await this.companyModel.findByIdAndUpdate(id, updateCompanyDto, { new: true }).select('_id name industry').lean().exec();
         if (!updatedCompany) {
             throw new Error('Company not found');
         }

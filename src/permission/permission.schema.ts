@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+// TODO: Update Permission Schema with domain fields
+//  to add specific permission guard to each domain
+
 export enum PermissionType {
   Read = 'read',
   Write = 'write',

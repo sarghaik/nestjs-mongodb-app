@@ -2,6 +2,8 @@ import { Body, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common'
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { PermissionService } from '../permission/permission.service';
+import { PermissionType } from '../permission/permission.schema';
 
 @ApiTags('user')
 @ApiBearerAuth()

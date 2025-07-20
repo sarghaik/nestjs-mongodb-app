@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PermissionSchema = exports.Permission = exports.PermissionType = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
+// TODO: Update Permission Schema with domain fields
+//  to add specific permission guard to each domain
 var PermissionType;
 (function (PermissionType) {
     PermissionType["Read"] = "read";

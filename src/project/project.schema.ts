@@ -2,6 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+//TODO: Add extra entity for project user relation to get each projects users
+//TODO: Move enums into a separate file
+
 export enum ProjectStatus {
   Active = 'Active',
   Archived = 'Archived'

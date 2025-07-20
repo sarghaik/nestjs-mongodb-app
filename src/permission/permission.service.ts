@@ -25,6 +25,23 @@ export class PermissionService {
   }
 
   async addPermission(userId: string, companyId: string, type: PermissionType) {
+    if(PermissionType.Admin === type) {
+      const permissionRead = new this.permissionModel({
+        userId: new Types.ObjectId(userId),
+        companyId: new Types.ObjectId(companyId),
+        type: PermissionType.Read,
+      });
+      await permissionRead.save();
+
+      const permissionWrite = new this.permissionModel({
+        userId: new Types.ObjectId(userId),
+        companyId: new Types.ObjectId(companyId),
+        type: PermissionType.Write,
+      });
+      await permissionWrite.save();
+    }
+
+    
     const permission = new this.permissionModel({
       userId: new Types.ObjectId(userId),
       companyId: new Types.ObjectId(companyId),

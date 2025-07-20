@@ -41,14 +41,21 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const user_schema_1 = require("./user.schema");
 const bcrypt = __importStar(require("bcryptjs"));
+const permission_service_1 = require("../permission/permission.service");
+const permission_schema_1 = require("../permission/permission.schema");
 let UserService = class UserService {
-    constructor(userModel) {
+    constructor(userModel, permissionService) {
         this.userModel = userModel;
+        this.permissionService = permissionService;
     }
     async createUser(createUserDto) {
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         const createdUser = new this.userModel(Object.assign(Object.assign({}, createUserDto), { password: hashedPassword }));
-        return createdUser.save();
+        const newUser = createdUser.save();
+        if (createUserDto === null || createUserDto === void 0 ? void 0 : createUserDto.companyId) {
+            const hasPermission = await this.permissionService.addPermission(createdUser._id, createUserDto.companyId, permission_schema_1.PermissionType.Read);
+        }
+        return newUser;
     }
     async findUser(id) {
         const user = await this.userModel.findById(id).exec();
@@ -78,6 +85,7 @@ let UserService = class UserService {
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        permission_service_1.PermissionService])
 ], UserService);
 exports.UserService = UserService;

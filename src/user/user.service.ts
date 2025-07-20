@@ -3,10 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './user.schema';
 import * as bcrypt from 'bcryptjs';
+import { PermissionService } from '../permission/permission.service';
+import { PermissionType } from '../permission/permission.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>, 
+    private readonly permissionService: PermissionService) {}
 
   async createUser(createUserDto: any): Promise<User> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -14,7 +17,14 @@ export class UserService {
       ...createUserDto,
       password: hashedPassword,
     });
-    return createdUser.save();
+    const newUser = createdUser.save();
+    if (createUserDto?.companyId) {
+      const hasPermission = await this.permissionService.addPermission(
+        createdUser._id, 
+        createUserDto.companyId, 
+        PermissionType.Read);
+    }
+    return newUser;
   }
 
   async findUser(id: string): Promise<User> {

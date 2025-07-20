@@ -13,6 +13,8 @@ exports.ProjectSchema = exports.Project = exports.ProjectPriority = exports.Proj
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const swagger_1 = require("@nestjs/swagger");
+//TODO: Add extra entity for project user relation to get each projects users
+//TODO: Move enums into a separate file
 var ProjectStatus;
 (function (ProjectStatus) {
     ProjectStatus["Active"] = "Active";

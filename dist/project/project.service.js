@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const project_schema_1 = require("./project.schema");
+//TODO: Update any to specific DTOs as needed
 let ProjectService = class ProjectService {
     constructor(projectModel) {
         this.projectModel = projectModel;
@@ -26,10 +27,11 @@ let ProjectService = class ProjectService {
         return createdProject.save();
     }
     async findProjects(companyId) {
-        return this.projectModel.find({ companyId }).exec();
+        return this.projectModel.find({ companyId }, '_id name description status priority tags companyId').lean().exec();
     }
     async updateProject(id, updateProjectDto) {
-        const updatedProject = await this.projectModel.findByIdAndUpdate(id, updateProjectDto, { new: true }).exec();
+        const updatedProject = await this.projectModel.findByIdAndUpdate(id, updateProjectDto, { new: true })
+            .select('_id name description status priority tags companyId').lean().exec();
         if (!updatedProject) {
             throw new Error('Project not found');
         }

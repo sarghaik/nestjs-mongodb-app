@@ -32,6 +32,20 @@ let PermissionService = class PermissionService {
         return !!permission;
     }
     async addPermission(userId, companyId, type) {
+        if (permission_schema_1.PermissionType.Admin === type) {
+            const permissionRead = new this.permissionModel({
+                userId: new mongoose_2.Types.ObjectId(userId),
+                companyId: new mongoose_2.Types.ObjectId(companyId),
+                type: permission_schema_1.PermissionType.Read,
+            });
+            await permissionRead.save();
+            const permissionWrite = new this.permissionModel({
+                userId: new mongoose_2.Types.ObjectId(userId),
+                companyId: new mongoose_2.Types.ObjectId(companyId),
+                type: permission_schema_1.PermissionType.Write,
+            });
+            await permissionWrite.save();
+        }
         const permission = new this.permissionModel({
             userId: new mongoose_2.Types.ObjectId(userId),
             companyId: new mongoose_2.Types.ObjectId(companyId),
